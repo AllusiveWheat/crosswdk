@@ -30,11 +30,12 @@ list(SORT WDK_NTOSKRNL_LIB COMPARE NATURAL)
 foreach (LIBRARY_PATH IN LISTS WDK_LIB_FILES)
     get_filename_component(LIBRARY_NAME_WE ${LIBRARY_PATH} NAME_WE)
     string(TOUPPER ${LIBRARY_NAME_WE} LIBRARY_NAME_UPPER)
-
-    add_library(WDK::${LIBRARY_NAME_UPPER} UNKNOWN IMPORTED)
-    set_target_properties(WDK::${LIBRARY_NAME_UPPER} PROPERTIES
+    if(NOT TARGET WDK::${LIBRARY_NAME_UPPER})
+        add_library(WDK::${LIBRARY_NAME_UPPER} UNKNOWN IMPORTED)
+        set_target_properties(WDK::${LIBRARY_NAME_UPPER} PROPERTIES
             IMPORTED_LOCATION "${LIBRARY_PATH}"
-    )
+        )
+    endif()
 endforeach ()
 
 foreach (_dir ${CMAKE_MODULE_PATH})
